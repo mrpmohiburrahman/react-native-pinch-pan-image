@@ -50,7 +50,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "react-native-redash": "^16.0.8"
+    "react-native-redash": "^16.0.8",
+    "react-native-photo-manipulator": "^1.2.7",
+    "react-native-face-detection": "^0.1.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
