@@ -21,7 +21,7 @@ import { getFaceRects } from './utils/getFaceRects';
 import { getScaleToFit } from './utils/getScaleToFit';
 import { setImageTypeOnUseState } from './utils/setImageTypeOnUseState';
 import { CompareSlider } from './react-native-compare-slider';
-// import { CompareSlider } from '../react-native-compare-slider';
+
 
 const rtl = I18nManager.isRTL;
 
