@@ -1,5 +1,10 @@
 [![npm version](https://badge.fury.io/js/react-native-awesome-gallery.svg)](https://badge.fury.io/js/react-native-awesome-gallery)
 
+
+```sh
+yarn add mrpmohiburrahman/react-native-pinch-pan-image.git#pinchPan
+```
+
 <div style="text-align: center;">
   <h1 align="center">React Native Awesome Gallery</h1>
   <h3 align="center">Photos gallery powered by Reanimated v2 and react-native-gesture-handler</h3>
