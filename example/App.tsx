@@ -13,8 +13,6 @@ const viewPortHeight = width * 0.92; // 400
 const viewPortWidth = width * 0.92; // 400
 
 const App= () => {
-  
-
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View

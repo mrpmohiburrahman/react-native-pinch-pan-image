@@ -1,4 +1,4 @@
-package com.photoenhancer.newarchitecture.modules;
+package com.example.pinchpanimage.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

@@ -1,4 +1,4 @@
-package com.photoenhancer.newarchitecture.components;
+package com.example.pinchpanimage.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

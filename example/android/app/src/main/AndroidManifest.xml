@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.photoenhancer">
+  package="com.example.pinchpanimage">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

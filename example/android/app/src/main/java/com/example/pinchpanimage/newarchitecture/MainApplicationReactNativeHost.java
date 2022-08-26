@@ -1,4 +1,4 @@
-package com.photoenhancer.newarchitecture;
+package com.example.pinchpanimage.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.photoenhancer.BuildConfig;
-import com.photoenhancer.newarchitecture.components.MainComponentsRegistry;
-import com.photoenhancer.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.example.pinchpanimage.BuildConfig;
+import com.example.pinchpanimage.newarchitecture.components.MainComponentsRegistry;
+import com.example.pinchpanimage.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
