@@ -1,10 +1,15 @@
-import React, { useRef } from 'react';
-import { View, Animated } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 
 import { Slider } from '../Slider';
 import { ICompareSlider } from '../../types';
 
 import { styles } from './styles';
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 export const CompareSlider: React.FC<ICompareSlider> = (props) => {
   const {
@@ -17,9 +22,25 @@ export const CompareSlider: React.FC<ICompareSlider> = (props) => {
     showSeparationLine,
   } = props;
   const { width: containerWidth, height: containerHeight } = containerSize;
-  const translateX = useRef(new Animated.Value(0));
-  const boxWidth = useRef(Animated.add(translateX.current, containerWidth / 2));
 
+  const translateX = useSharedValue(0);
+  const boxWidth = useDerivedValue(
+    () => translateX.value + containerWidth / 2,
+    [translateX]
+  );
+
+  const updateTranslateX = (value: any) => {
+    'worklet';
+    translateX.value = value;
+  };
+  const animatedStyle = {
+    before: useAnimatedStyle(() => ({
+      width: boxWidth.value,
+    })),
+    after: useAnimatedStyle(() => ({
+      left: boxWidth.value,
+    })),
+  };
   return (
     <View
       style={[
@@ -38,12 +59,12 @@ export const CompareSlider: React.FC<ICompareSlider> = (props) => {
         }}
       >
         <Animated.View
-          style={[styles.item, styles.itemBefore, { width: boxWidth.current }]}
+          style={[styles.item, styles.itemBefore, animatedStyle.before]}
         >
           {before}
         </Animated.View>
         <Animated.View
-          style={[styles.item, styles.itemAfter, { left: boxWidth.current }]}
+          style={[styles.item, styles.itemAfter, animatedStyle.after]}
         >
           <Animated.View
             style={[styles.itemAfterChild, { width: containerWidth }]}
@@ -53,7 +74,8 @@ export const CompareSlider: React.FC<ICompareSlider> = (props) => {
         </Animated.View>
       </View>
       <Slider
-        translateX={translateX.current}
+        translateX={translateX}
+        updateTranslateX={updateTranslateX}
         sliderSize={sliderSize}
         containerSize={containerSize}
         sliderStyles={sliderStyles}

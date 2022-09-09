@@ -90,7 +90,6 @@
       "<rootDir>/lib/"
     ]
   },
-  
   "release-it": {
     "git": {
       "commitMessage": "chore: release ${version}",

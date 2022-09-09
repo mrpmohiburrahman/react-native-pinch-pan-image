@@ -2,7 +2,7 @@
 // and some types can be inside component - not needed for external usage
 
 import React from 'react';
-import { Animated, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 
 export interface ISize {
   width: number;
@@ -15,7 +15,8 @@ export interface IDefaultSliderProps {
 }
 
 export interface ISliderProps extends IDefaultSliderProps {
-  translateX: Animated.Value;
+  translateX: any;
+  updateTranslateX: any;
   SliderComponent?: React.ReactNode;
   containerSize: ISize;
   showSeparationLine?: boolean;

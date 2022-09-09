@@ -1,21 +1,27 @@
-import React, { useCallback, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import {
-  HandlerStateChangeEvent,
   PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  State,
+  PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
-// import { HandlerStateChangeEvent } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
 import { DEFAULT_SLIDER_SIZE } from '../../utils/constants';
 import { IDefaultSliderProps, ISliderProps } from '../../types';
 
 import { styles } from './styles';
+import Animated, {
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  Value,
+} from 'react-native-reanimated';
+import { clamp } from 'react-native-redash';
 
-const initialAnimatedValue = new Animated.Value(0);
+const initialAnimatedValue = new Value(0);
 
-const DefaultSlider: React.FC<IDefaultSliderProps> = ({ sliderSize = DEFAULT_SLIDER_SIZE, sliderStyles }) => {
+const DefaultSlider: React.FC<IDefaultSliderProps> = ({
+  sliderSize = DEFAULT_SLIDER_SIZE,
+  sliderStyles,
+}) => {
   return (
     <View style={[styles.slider, sliderStyles, sliderSize]}>
       <View style={[styles.sliderArrow, styles.sliderArrowRight]} />
@@ -24,43 +30,58 @@ const DefaultSlider: React.FC<IDefaultSliderProps> = ({ sliderSize = DEFAULT_SLI
   );
 };
 
-export const Slider: React.FC<ISliderProps> = props => {
+export const Slider: React.FC<ISliderProps> = (props) => {
   const {
-    containerSize: { height: containerHeight },
+    containerSize: { height: containerHeight, width },
     translateX = initialAnimatedValue,
+    updateTranslateX,
     sliderSize = DEFAULT_SLIDER_SIZE,
     sliderStyles,
     showSeparationLine = true,
     separationLineStyles,
-    SliderComponent = <DefaultSlider sliderSize={sliderSize} sliderStyles={sliderStyles} />,
+    SliderComponent = (
+      <DefaultSlider sliderSize={sliderSize} sliderStyles={sliderStyles} />
+    ),
   } = props;
-  const lastOffsetX = useRef(0);
 
-  const onPanGestureEvent = Animated.event([{ nativeEvent: { translationX: translateX } }], {
-    useNativeDriver: false,
+  const offsetFromEdges = 30;
+  const boundX = width / 2 - offsetFromEdges;
+
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { offsetX: number }
+  >({
+    onStart: (_event, ctx) => {
+      ctx.offsetX = translateX.value;
+    },
+    onActive: (event, ctx) => {
+      translateX.value = clamp(
+        ctx.offsetX + event.translationX,
+        -boundX,
+        boundX
+      );
+      updateTranslateX(translateX.value);
+    },
+    onEnd: () => {},
+  });
+  const animatedStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateX: translateX.value }] };
   });
 
-  const onHandlerStateChange = useCallback(
-    (event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>) => {
-      if (event.nativeEvent.oldState === State.ACTIVE) {
-        lastOffsetX.current += event.nativeEvent.translationX;
-        translateX.setOffset(lastOffsetX.current);
-        translateX.setValue(0);
-      }
-    },
-    [translateX]
-  );
-
   return (
-    <PanGestureHandler
-      activeOffsetX={[-0, 0]}
-      onGestureEvent={onPanGestureEvent}
-      onHandlerStateChange={onHandlerStateChange}>
+    <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View
-        style={[sliderSize, styles.animatedView, { transform: [{ translateX }] }]}
-        pointerEvents="box-only">
+        style={[sliderSize, styles.animatedView, animatedStyle]}
+        pointerEvents="box-only"
+      >
         {showSeparationLine && (
-          <View style={[styles.separationLine, { height: containerHeight }, separationLineStyles]} />
+          <Animated.View
+            style={[
+              styles.separationLine,
+              { height: containerHeight },
+              separationLineStyles,
+            ]}
+          />
         )}
         {SliderComponent}
       </Animated.View>
